@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Comprehensive Measure of Well-Being</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="grain"></div>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <div class="brand">
+      <span class="brand-mark">W</span>
+      <span class="brand-name">Well&#8209;Being&nbsp;Index</span>
+    </div>
+    <nav class="site-nav">
+      <a href="#estimator">Estimator</a>
+      <a href="#methodology">Methodology</a>
+      <a href="#model">The Model</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <p class="eyebrow">Human Development Index &middot; Machine Learning Estimator</p>
+      <h1>Where does a life<br> actually stand?</h1>
+      <p class="hero-copy">
+        The HDI measures development not by the size of an economy, but by the
+        length and health of a life, the reach of an education, and the
+        resources a person can command. Move the indicators below and watch
+        a country's standing take shape.
+      </p>
+
+      <div class="spectrum-hero" id="heroSpectrum" aria-hidden="true">
+        <div class="spectrum-track">
+          <div class="spectrum-segment seg-low">Low</div>
+          <div class="spectrum-segment seg-medium">Medium</div>
+          <div class="spectrum-segment seg-high">High</div>
+          <div class="spectrum-segment seg-veryhigh">Very High</div>
+        </div>
+        <div class="spectrum-marker" id="heroMarker" style="left: 12%;">
+          <div class="marker-dot"></div>
+        </div>
+      </div>
+      <p class="spectrum-caption">The Well-Being Spectrum &mdash; every prediction lands somewhere on this line.</p>
+    </div>
+  </section>
+
+  <!-- ============ ESTIMATOR ============ -->
+  <section class="estimator" id="estimator">
+    <div class="wrap estimator-grid">
+
+      <!-- INPUT PANEL -->
+      <div class="panel input-panel">
+        <h2 class="panel-title">Enter the indicators</h2>
+        <p class="panel-sub">Four numbers, drawn straight from UNDP methodology.</p>
+
+        <form id="predictForm">
+
+          <div class="field">
+            <div class="field-label-row">
+              <label for="life_expectancy">Life expectancy at birth</label>
+              <output class="field-value" id="life_expectancy_val">72.0</output>
+            </div>
+            <input type="range" id="life_expectancy" name="life_expectancy"
+                   min="{{ ranges.life_expectancy[0] }}" max="{{ ranges.life_expectancy[1] }}"
+                   step="0.1" value="72.0" class="slider slider-le">
+            <div class="field-scale"><span>{{ ranges.life_expectancy[0] }} yrs</span><span>{{ ranges.life_expectancy[1] }} yrs</span></div>
+          </div>
+
+          <div class="field">
+            <div class="field-label-row">
+              <label for="mean_years_schooling">Mean years of schooling</label>
+              <output class="field-value" id="mean_years_schooling_val">8.0</output>
+            </div>
+            <input type="range" id="mean_years_schooling" name="mean_years_schooling"
+                   min="{{ ranges.mean_years_schooling[0] }}" max="{{ ranges.mean_years_schooling[1] }}"
+                   step="0.1" value="8.0" class="slider slider-mys">
+            <div class="field-scale"><span>{{ ranges.mean_years_schooling[0] }} yrs</span><span>{{ ranges.mean_years_schooling[1] }} yrs</span></div>
+          </div>
+
+          <div class="field">
+            <div class="field-label-row">
+              <label for="expected_years_schooling">Expected years of schooling</label>
+              <output class="field-value" id="expected_years_schooling_val">12.0</output>
+            </div>
+            <input type="range" id="expected_years_schooling" name="expected_years_schooling"
+                   min="{{ ranges.expected_years_schooling[0] }}" max="{{ ranges.expected_years_schooling[1] }}"
+                   step="0.1" value="12.0" class="slider slider-eys">
+            <div class="field-scale"><span>{{ ranges.expected_years_schooling[0] }} yrs</span><span>{{ ranges.expected_years_schooling[1] }} yrs</span></div>
+          </div>
+
+          <div class="field">
+            <div class="field-label-row">
+              <label for="gni_per_capita">GNI per capita (PPP $)</label>
+              <output class="field-value" id="gni_per_capita_val">15,000</output>
+            </div>
+            <input type="range" id="gni_per_capita" name="gni_per_capita"
+                   min="{{ ranges.gni_per_capita[0] }}" max="{{ ranges.gni_per_capita[1] }}"
+                   step="50" value="15000" class="slider slider-gni">
+            <div class="field-scale"><span>${{ ranges.gni_per_capita[0] }}</span><span>${{ "{:,}".format(ranges.gni_per_capita[1]) }}</span></div>
+          </div>
+
+          <button type="submit" class="btn-predict">
+            <span>Estimate well-being</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8H14M14 8L9 3M14 8L9 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </form>
+
+        <div class="preset-row">
+          <span class="preset-label">Try a scenario:</span>
+          <button class="preset-btn" data-preset="veryhigh">Very High</button>
+          <button class="preset-btn" data-preset="medium">Emerging</button>
+          <button class="preset-btn" data-preset="low">Low</button>
+        </div>
+      </div>
+
+      <!-- RESULT PANEL -->
+      <div class="panel result-panel" id="resultPanel">
+        <div class="result-empty" id="resultEmpty">
+          <div class="empty-icon">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+              <circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="1.4" stroke-dasharray="3 4"/>
+              <path d="M20 12V20L25 25" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <p>Set the indicators and estimate to see where this profile falls
+             on the Well-Being Spectrum.</p>
+        </div>
+
+        <div class="result-content hidden" id="resultContent">
+          <p class="result-eyebrow">Predicted tier</p>
+          <h3 class="result-tier" id="resultTierName">&mdash;</h3>
+          <p class="result-blurb" id="resultBlurb"></p>
+
+          <div class="spectrum-hero spectrum-result">
+            <div class="spectrum-track">
+              <div class="spectrum-segment seg-low">Low</div>
+              <div class="spectrum-segment seg-medium">Medium</div>
+              <div class="spectrum-segment seg-high">High</div>
+              <div class="spectrum-segment seg-veryhigh">Very High</div>
+            </div>
+            <div class="spectrum-marker" id="resultMarker" style="left: 12%;">
+              <div class="marker-dot"></div>
+            </div>
+          </div>
+
+          <div class="score-row">
+            <div class="score-badge">
+              <span class="score-label">HDI score</span>
+              <span class="score-number" id="scoreNumber">0.000</span>
+            </div>
+            <div class="score-badge">
+              <span class="score-label">Formula tier</span>
+              <span class="score-number score-number--small" id="formulaTier">&mdash;</span>
+            </div>
+          </div>
+
+          <p class="probs-title">Model confidence by tier</p>
+          <div class="probs" id="probsList"></div>
+        </div>
+
+        <div class="result-error hidden" id="resultError"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ METHODOLOGY ============ -->
+  <section class="methodology" id="methodology">
+    <div class="wrap">
+      <p class="eyebrow">Methodology</p>
+      <h2>Three dimensions, one number</h2>
+      <div class="method-grid">
+        <div class="method-card">
+          <span class="method-index">01</span>
+          <h3>A long, healthy life</h3>
+          <p>Measured by life expectancy at birth, normalised against a
+             20&ndash;85 year range set by the lowest and highest life
+             expectancies observed globally.</p>
+        </div>
+        <div class="method-card">
+          <span class="method-index">02</span>
+          <h3>Knowledge</h3>
+          <p>The average of mean years of schooling actually completed by
+             adults, and the years of schooling a child entering school
+             today can expect to receive.</p>
+        </div>
+        <div class="method-card">
+          <span class="method-index">03</span>
+          <h3>A decent standard of living</h3>
+          <p>Gross National Income per capita, adjusted for purchasing
+             power, and log-transformed so that income gains matter less
+             once basic needs are already met.</p>
+        </div>
+      </div>
+      <div class="formula-strip">
+        <span class="formula-text">HDI&nbsp;=&nbsp;<sup>3</sup>&radic;( Health&nbsp;&times;&nbsp;Education&nbsp;&times;&nbsp;Income )</span>
+        <span class="formula-note">the geometric mean penalises a nation whenever any single dimension lags behind</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MODEL INFO ============ -->
+  <section class="model-info" id="model">
+    <div class="wrap model-grid">
+      <div>
+        <p class="eyebrow eyebrow--light">Under the hood</p>
+        <h2>A model trained on the mechanics of the index itself</h2>
+        <p class="model-copy">
+          Rather than memorising a fixed lookup table, a classifier was
+          trained on thousands of simulated national profiles spanning
+          the full range of the four indicators, learning the same
+          non-linear, compensating relationships that the official HDI
+          formula encodes.
+        </p>
+      </div>
+      <div class="model-stats">
+        <div class="stat-card">
+          <span class="stat-value">{{ model_name }}</span>
+          <span class="stat-label">Model</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value">{{ "%.1f"|format(test_accuracy * 100) }}%</span>
+          <span class="stat-label">Held-out accuracy</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value">4</span>
+          <span class="stat-label">Input indicators</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value">4</span>
+          <span class="stat-label">Development tiers</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <p>A Comprehensive Measure of Well-Being &mdash; a group project built with
+       Python, scikit-learn, Pandas, NumPy, Flask, Matplotlib, and Seaborn.</p>
+    <p class="footer-note">HDI thresholds follow official UNDP conventions:
+       Very High &ge; 0.800 &middot; High 0.700&ndash;0.799 &middot;
+       Medium 0.550&ndash;0.699 &middot; Low &lt; 0.550.</p>
+  </div>
+</footer>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

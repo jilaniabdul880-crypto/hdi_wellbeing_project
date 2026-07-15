@@ -1,0 +1,60 @@
+{
+  "model_name": "LogisticRegression",
+  "features": [
+    "life_expectancy",
+    "mean_years_schooling",
+    "expected_years_schooling",
+    "gni_per_capita"
+  ],
+  "tier_order": [
+    "Low",
+    "Medium",
+    "High",
+    "Very High"
+  ],
+  "test_accuracy": 0.9658,
+  "cv_scores": {
+    "LogisticRegression": 0.9623,
+    "RandomForest": 0.9575,
+    "GradientBoosting": 0.9571
+  },
+  "classification_report": {
+    "Low": {
+      "precision": 0.9371069182389937,
+      "recall": 0.9197530864197531,
+      "f1-score": 0.9283489096573209,
+      "support": 162.0
+    },
+    "Medium": {
+      "precision": 0.9810996563573883,
+      "recall": 0.9878892733564014,
+      "f1-score": 0.9844827586206897,
+      "support": 578.0
+    },
+    "High": {
+      "precision": 0.9437751004016064,
+      "recall": 0.9362549800796812,
+      "f1-score": 0.94,
+      "support": 251.0
+    },
+    "Very High": {
+      "precision": 0.9714285714285714,
+      "recall": 0.9760765550239234,
+      "f1-score": 0.9737470167064439,
+      "support": 209.0
+    },
+    "accuracy": 0.9658333333333333,
+    "macro avg": {
+      "precision": 0.95835256160664,
+      "recall": 0.9549934737199397,
+      "f1-score": 0.9566446712461136,
+      "support": 1200.0
+    },
+    "weighted avg": {
+      "precision": 0.9656692031322183,
+      "recall": 0.9658333333333333,
+      "f1-score": 0.9657305702824095,
+      "support": 1200.0
+    }
+  }
+}
